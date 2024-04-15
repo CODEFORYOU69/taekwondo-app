@@ -7,11 +7,11 @@ export default function AddRoundModal({ open, onClose, match }) {
     const [scoreRed, setScoreRed] = useState('');
     const [isWinner, setIsWinner] = useState('');
 
-
+console.log("match", match);
     const [victoryType, setVictoryType] = useState('');
 
     const handleSave = async () => {
-        const response = await fetch('/api/rounds', {
+        const response = await fetch('/api/rounds/addRound', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -43,12 +43,14 @@ export default function AddRoundModal({ open, onClose, match }) {
                 <TextField
                     label="Score Blue"
                     value={scoreBlue}
+                    type="number"
                     onChange={(e) => setScoreBlue(e.target.value)}
                     fullWidth
                 />
                 <TextField
                     label="Score Red"
                     value={scoreRed}
+                    type="number"
                     onChange={(e) => setScoreRed(e.target.value)}
                     fullWidth
                 />
@@ -70,8 +72,8 @@ export default function AddRoundModal({ open, onClose, match }) {
                     onChange={(e) => setIsWinner(e.target.value)}
                     fullWidth
                 >
-                    <MenuItem value="blue">yes</MenuItem>
-                    <MenuItem value="red">no</MenuItem>
+                    <MenuItem value="yes">yes</MenuItem>
+                    <MenuItem value="no">no</MenuItem>
                     
                 </Select>
                 <Button onClick={handleSave}>Save</Button>
