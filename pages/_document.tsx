@@ -1,5 +1,7 @@
 // pages/_document.tsx
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Page from '../app/page';
+
 
 class MyDocument extends Document {
   static async getInitialProps(ctx:any) {
@@ -14,8 +16,10 @@ class MyDocument extends Document {
                     {/* Mettez ici vos liens vers des feuilles de style externes ou tout autre élément <head> global */}
                 </Head>
                 <body>
+                    <Page>
                     <Main />
                     <NextScript />
+                    </Page>
                 </body>
             </Html>
         );

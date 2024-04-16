@@ -1,11 +1,13 @@
-// components/MobileNavbar.tsx
 import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const MobileNavbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const router = useRouter();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -14,6 +16,18 @@ const MobileNavbar: React.FC = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+
+  const handleLogout = () => {
+      // Clear local storage or cookies here
+      localStorage.removeItem('token');  // Assuming 'token' is your authentication token
+  
+      // You could also clear cookies if they are used
+  
+      // Redirect to the login page
+      router.push('/login');
+  };
+  
 
   return (
     <AppBar position="static">
@@ -46,12 +60,14 @@ const MobileNavbar: React.FC = () => {
           open={open}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Coach</MenuItem>
-          <MenuItem onClick={handleClose}>Fighter</MenuItem>
-          <MenuItem onClick={handleClose}>Competition</MenuItem>
-          <Button color="inherit" onClick={handleClose}>Login</Button>
-          <Button color="inherit" onClick={handleClose}>Signin</Button>
-
+          <Link href="/dashboard"><MenuItem onClick={handleClose}>Dashboard</MenuItem></Link>
+          <Link href="/coach"><MenuItem onClick={handleClose}>Coach</MenuItem></Link>
+          <Link href="/my-fighter"><MenuItem onClick={handleClose}>Fighter</MenuItem></Link>
+          <Link href="/mycompetitions"><MenuItem onClick={handleClose}>My Competition</MenuItem></Link>
+          <Link href="/competitionday"><MenuItem onClick={handleClose}>Fight Day</MenuItem></Link>
+          <Link href="/signin"><Button color="inherit" onClick={handleClose}>Signin</Button></Link>
+          <Link href="/login"><Button color="inherit" onClick={handleClose}>Login</Button></Link>
+          <Button color="inherit" onClick={handleLogout}>Log out</Button>
         </Menu>
       </Toolbar>
     </AppBar>

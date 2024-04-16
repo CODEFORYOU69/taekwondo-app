@@ -48,13 +48,32 @@ console.log("completedMatches", completedMatches);
     }, [selectedCompetition]);
 
     useEffect(() => {
-        
-            fetch(`/api/round/getround?matchId=${completedMatches.id}`)
+        if (completedMatches.length > 0) {
+            const fetchRoundsPromises = completedMatches.map(match =>
+                fetch(`/api/rounds/getRound?matchId=${match.id}`)
                 .then(res => res.json())
-                .then(roundData => setRoundData(roundData))
-                .catch(err => console.error('Error fetching rounds:', err));
-                
-    }, [completedMatches]);
+                .then(data => {
+                    return { matchId: match.id, rounds: data }; // Return rounds with associated matchId
+                })
+                .catch(err => {
+                    console.error(`Error fetching rounds for match ${match.id}:`, err);
+                    return { matchId: match.id, rounds: [] }; // Return empty rounds on error
+                })
+            );
+    
+            Promise.all(fetchRoundsPromises)
+                .then(results => {
+                    // Transform results into an object keyed by matchId
+                    const roundsByMatch = results.reduce((acc, result) => {
+                        acc[result.matchId] = result.rounds;
+                        return acc;
+                    }, {});
+                    setRoundData(roundsByMatch); // Store the rounds data by match ID
+                })
+                .catch(err => console.error('Error fetching all rounds:', err));
+        }
+    }, [completedMatches]); // Dependency on completedMatches
+    
     
 
     const handleCompetitionChange = (event) => {
@@ -119,7 +138,7 @@ console.log("completedMatches", completedMatches);
                 <Typography variant="subtitle1" gutterBottom>
                     Result: {match.result}
                 </Typography>
-                {roundData.map(round => (
+                {roundData[match.id] && roundData[match.id].map(round => (
                     <Box key={round.id} sx={{ paddingLeft: '20px', paddingTop: '5px' }}>
                         <Typography variant="body2">
                             Round Score: Blue {round.scoreBlue} - Red {round.scoreRed}
@@ -128,15 +147,15 @@ console.log("completedMatches", completedMatches);
                             Victory Type: {round.victoryType || 'N/A'}
                         </Typography>
                         <Typography variant="body2">
-                            result: {match.isWinner ? 'Winner' : 'Loser'}
+                           result: {round.isWinner ? 'Winner' : 'Loser'}
                         </Typography>
                     </Box>
                 ))}
-                
             </div>
         ))}
     </div>
 )}
+
 {selectedMatch && (
                 <AddRoundModal
                     open={isModalOpen}

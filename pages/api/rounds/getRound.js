@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
     const { matchId } = req.query; // Access matchId from the query parameters
+    console.log("matchId:", matchId);
 
     if (!matchId) {
         return res.status(400).json({ message: "Missing matchId parameter" });
@@ -15,9 +16,6 @@ export default async function handler(req, res) {
                 where: {
                     matchId: parseInt(matchId),
                 },
-                orderBy: {
-                    createdAt: 'asc', // Optionally order by creation time or another field
-                }
             });
 
             if (rounds.length > 0) {
