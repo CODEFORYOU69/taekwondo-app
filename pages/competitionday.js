@@ -20,7 +20,7 @@ export default function CompetitionDay() {
     }
 }, [matches]);
 
-
+console.log("completedMatches", completedMatches);
     const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
 };
@@ -46,16 +46,15 @@ export default function CompetitionDay() {
                 .catch(err => console.error('Error fetching matches:', err));
         }
     }, [selectedCompetition]);
+
     useEffect(() => {
-        if (selectedMatch) {
-            fetch(`/api/round/getround?matchId=${selectedMatch.id}`)
+        
+            fetch(`/api/round/getround?matchId=${completedMatches.id}`)
                 .then(res => res.json())
-                .then(roundData => {
-                    setRoundData(roundData);
-                })
+                .then(roundData => setRoundData(roundData))
                 .catch(err => console.error('Error fetching rounds:', err));
-        }
-    }, [selectedMatch]);
+                
+    }, [completedMatches]);
     
 
     const handleCompetitionChange = (event) => {
