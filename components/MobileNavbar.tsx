@@ -1,9 +1,8 @@
-"use client"
 import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const MobileNavbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -62,11 +61,11 @@ const MobileNavbar: React.FC = () => {
           onClose={handleClose}
         >
           <Link href="/dashboard"><MenuItem onClick={handleClose}>Dashboard</MenuItem></Link>
-          <Link href="/coach"><MenuItem onClick={handleClose}>Coach</MenuItem></Link>
-          <Link href="/my-fighter"><MenuItem onClick={handleClose}>Fighter</MenuItem></Link>
+          <Link href="/my-coaches"><MenuItem onClick={handleClose}>Coach</MenuItem></Link>
+          <Link href="/my-fighters"><MenuItem onClick={handleClose}>Fighter</MenuItem></Link>
           <Link href="/mycompetitions"><MenuItem onClick={handleClose}>My Competition</MenuItem></Link>
           <Link href="/competitionday"><MenuItem onClick={handleClose}>Fight Day</MenuItem></Link>
-          <Link href="/signin"><Button color="inherit" onClick={handleClose}>Signin</Button></Link>
+          <Link href="/inscription"><Button color="inherit" onClick={handleClose}>Signin</Button></Link>
           <Link href="/login"><Button color="inherit" onClick={handleClose}>Login</Button></Link>
           <Button color="inherit" onClick={handleLogout}>Log out</Button>
         </Menu>

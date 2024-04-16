@@ -6,8 +6,6 @@ export default function AddRoundModal({ open, onClose, match }) {
     const [scoreBlue, setScoreBlue] = useState('');
     const [scoreRed, setScoreRed] = useState('');
     const [isWinner, setIsWinner] = useState('');
-
-console.log("match", match);
     const [victoryType, setVictoryType] = useState('');
 
     const handleSave = async () => {

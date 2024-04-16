@@ -25,7 +25,6 @@ model User {
   name          String
   clubId        Int
   club          Club      @relation(fields: [clubId], references: [id])
-  isAccepted    Boolean   @default(false)
   createdAt     DateTime  @default(now())
 }
 
