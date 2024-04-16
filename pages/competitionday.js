@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Select, MenuItem, Button, Tabs, Tab, Box } from '@mui/material';
+import { Container, Typography, Select, MenuItem, Button, Tabs, Tab, Box, Paper } from '@mui/material';
 import AddRoundModal from '../components/AddRoundModal';
 
 export default function CompetitionDay() {
@@ -93,53 +93,48 @@ console.log("completedMatches", completedMatches);
 
     return (
         <Container maxWidth="md">
-            <Typography variant="h4">Competition Day Viewer</Typography>
-            <Select
-                value={selectedCompetition?.id || ''}
-                onChange={handleCompetitionChange}
-                fullWidth
-                displayEmpty
-                renderValue={selected => selected ? selectedCompetition.name : 'Select a competition'}
-            >
-                {competitions.map(competition => (
-                    <MenuItem key={competition.id} value={competition.id}>
-                        {competition.name}
-                    </MenuItem>
-                ))}
-            </Select>
-    
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={tabValue} onChange={handleTabChange}>
-                    <Tab label="Ongoing Matches" />
-                    <Tab label="Completed Matches" />
-                </Tabs>
-            </Box>
-    
-            {tabValue === 0 && (
-                <div>
-                    {ongoingMatches.map(match => (
-                        <div key={match.id} style={{ backgroundColor: match.color, padding: '10px', margin: '5px 0' }}>
-                            <Typography variant="body1">
-                                Fight #{match.fightNumber} - {match.fighter.firstName} {match.fighter.lastName}
-                            </Typography>
-                            <Button onClick={() => openModal(match)}>Manage Rounds</Button>
-                        </div>
-                    ))}
-                </div>
-            )}
-    
-    {tabValue === 1 && (
-    <div>
-        {completedMatches.map(match => (
-            <div key={match.id} style={{ backgroundColor: match.color, padding: '10px', margin: '5px 0' }}>
+        <Typography variant="h4" sx={{ marginBottom: 2 }}>Competition Day Viewer</Typography>
+        <Select
+            value={selectedCompetition?.id || ''}
+            onChange={handleCompetitionChange}
+            fullWidth
+            displayEmpty
+            renderValue={selected => selected ? selectedCompetition.name : 'Select a competition'}
+            sx={{ marginBottom: 2 }}
+        >
+            {competitions.map(competition => (
+                <MenuItem key={competition.id} value={competition.id}>
+                    {competition.name}
+                </MenuItem>
+            ))}
+        </Select>
+
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: 2 }}>
+            <Tabs value={tabValue} onChange={(event, newValue) => setTabValue(newValue)}>
+                <Tab label="Ongoing Matches" />
+                <Tab label="Completed Matches" />
+            </Tabs>
+        </Box>
+
+        {tabValue === 0 && ongoingMatches.map(match => (
+            <Paper key={match.id} sx={{ backgroundColor: match.color, padding: 2, marginBottom: 1, color: 'white' }}>
+                <Typography variant="body1">
+                    Fight #{match.fightNumber} - {match.fighter.firstName} {match.fighter.lastName}
+                </Typography>
+                <Button onClick={() => openModal(match)}>Manage Rounds</Button>
+            </Paper>
+        ))}
+
+        {tabValue === 1 && completedMatches.map(match => (
+            <Paper key={match.id} sx={{ backgroundColor: match.color, padding: 2, marginBottom: 1, color: 'white' }}>
                 <Typography variant="h6" gutterBottom>
                     Fight #{match.fightNumber} - {match.fighter.firstName} {match.fighter.lastName}
                 </Typography>
                 <Typography variant="subtitle1" gutterBottom>
                     Result: {match.result}
                 </Typography>
-                {roundData[match.id] && roundData[match.id].map(round => (
-                    <Box key={round.id} sx={{ paddingLeft: '20px', paddingTop: '5px' }}>
+                {roundData[match.id]?.map(round => (
+                    <Box key={round.id} sx={{ paddingLeft: 2, paddingTop: 1 }}>
                         <Typography variant="body2">
                             Round Score: Blue {round.scoreBlue} - Red {round.scoreRed}
                         </Typography>
@@ -147,23 +142,21 @@ console.log("completedMatches", completedMatches);
                             Victory Type: {round.victoryType || 'N/A'}
                         </Typography>
                         <Typography variant="body2">
-                           result: {round.isWinner ? 'Winner' : 'Loser'}
+                            Result: {round.isWinner ? 'Winner' : 'Loser'}
                         </Typography>
                     </Box>
                 ))}
-            </div>
+            </Paper>
         ))}
-    </div>
-)}
 
-{selectedMatch && (
-                <AddRoundModal
-                    open={isModalOpen}
-                    onClose={closeModal}
-                    match={selectedMatch}
-                />
-            )}
-        </Container>
+        {selectedMatch && (
+            <AddRoundModal
+                open={isModalOpen}
+                onClose={closeModal}
+                match={selectedMatch}
+            />
+        )}
+    </Container>
     );
     
 }
